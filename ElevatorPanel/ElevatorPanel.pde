@@ -16,22 +16,25 @@ int countdown;
 int flag1 = 1;
 int flag2 = 0;
 String [] floorLables = {"B","G","M","S1","S2","S3","S4","S5"};
+int signTextSize = 60;
+String direction = "";
+int doorOffset = 160;
 
 void setup() {
-  size(300, 550);
+  size(600, 1000);
   cp5 = new ControlP5(this);
   //Button and event handler
   cp5.setColorBackground(color(150))
     .setColorForeground(color(100))
     .setColorActive(color(200));
-  size = 40;
-  column1 = width-(width/2)-(size+20);
-  column2 = width-(width/2)+20;
-  row1 = height-200;
+  size = 70;
+  column1 = width-(width/2)-(size+25);
+  column2 = width-(width/2)+25;
+  row1 = height-300;
   row2 = row1-(size+25);
   row3 = row2-(size+25);
   row4 = row3-(size+25);
-  PFont font = createFont("Arial",26,true);
+  PFont font = createFont("Arial",32,true);
   
   cp5.setFont(font);
  
@@ -62,10 +65,10 @@ void setup() {
     
   cp5.addButton("<|>")
     .setSize(size, size)
-    .setPosition(column1, row1+100);
+    .setPosition(column1, row1+doorOffset);
   cp5.addButton(">|<")
     .setSize(size, size)
-    .setPosition(column2, row1+100);
+    .setPosition(column2, row1+doorOffset);
    
   for (int i=0; i<6; i++){
     colors[i] = active;
@@ -74,36 +77,41 @@ void setup() {
 }
 
 void floorDisplay(){
-  int textSize = 32;
   stroke(color(0));
   fill(color(0));
-  rect(width-(width/2)-textSize-5, textSize-16, textSize*2+5, textSize+15);
-  rect(column1-50, row1+60, 112, 4);
-  rect(column1-50+(size+80)-12, row1-10-(3*(size+25))-14, 112, 4);
+  rect(width-(width/2)-signTextSize-10, signTextSize-16, signTextSize*2+15, signTextSize+15);
   
-  textFont(createFont("Arial",1,true), 40);
+  textFont(createFont("Arial",1,true), signTextSize);
   fill(255);
-  text(floorLables[currentFloor], width-(width/2)-textSize+5, 50);
+  text(floorLables[currentFloor], width-(width/2)-signTextSize+35, signTextSize+40);
+  text(direction, width-(width/2)-signTextSize, signTextSize+40);
 }
 
 void draw() {
   stroke(color(0));
   fill(color(0));
-  rect(width-(width/2)-2, height-415, 4, 275);
+  rect(width-(width/2)-3, height-610, 6, 406);
+  rect(column1-80, row1+size+20, 160, 6);
+  rect(column1-50+(size+80)+10, row1-10-(3*(size+25))-14, 160, 6);
   
   if(flag2==2){
     int delay= 500;
+    textFont(createFont("Arial",1,true), signTextSize);
+    fill(255);
     if (currentFloor>floor){
+      direction = "v";
       delay(delay);
       currentFloor--;
       println(currentFloor);
     }
     if (currentFloor<floor){
+      direction = "^";
       delay(delay);
       currentFloor++;
       println(currentFloor);
     }
     if (currentFloor==floor){
+      direction = "";
       delay(delay/2);
       flag2=0;
       colors[0]=colors[1]=colors[2]=colors[3]=colors[4]=colors[5]=colors[6]=colors[7]=colors[8]=colors[9]=color(0);
@@ -116,21 +124,21 @@ void draw() {
   for(int i=0; i<8; i++){
     stroke(color(0));
     fill(color(0));
-    rect(column1-50+((size+80)*(i%2)),row1-10-(((i-(i%2))/2)*(size+25)), 100, 60);
+    rect(column1-80+((size+120)*(i%2)),row1-10-(((i-(i%2))/2)*(size+25)), size+90, size+20);
     
     stroke(colors[i]);
     fill(colors[i]); 
-    rect(column1-5+((size+40)*(i%2)),row1-5-(((i-(i%2))/2)*(size+25)), 50, 50);
+    rect(column1-5+((size+50)*(i%2)),row1-5-(((i-(i%2))/2)*(size+25)), size+10, size+10);
   }
   
   for(int i=0; i<2; i++){
     stroke(color(0));
     fill(color(0));
-    rect(column1-50+((size+80)*(i%2)),row1+100-10-(((i-(i%2))/2)*(size+25)), 100, 60);
+    rect(column1-80+((size+120)*(i%2)),row1+doorOffset-10-(((i-(i%2))/2)*(size+25)), size+90, size+20);
     
     stroke(colors[i+8]);
     fill(colors[i+8]); 
-    rect(column1-5+((size+40)*(i%2)),row1+100-5-(((i-(i%2))/2)*(size+25)), 50, 50);
+    rect(column1-5+((size+50)*(i%2)),row1+doorOffset-5-(((i-(i%2))/2)*(size+25)), size+10, size+10);
   }
   
   if (flag2==1){
